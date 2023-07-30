@@ -9,20 +9,27 @@ const Button = ({handleClick, text}) =>{
   )
 }
 
-const Display = ({good, neutral, bad}) =>{
+const Statistics = ({good, neutral, bad}) =>{
+  if(good + bad + neutral === 0){
+    return(
+      <div>
+        No feedback given yet.
+      </div>
+    )
+  }
+
   const total = good + neutral + bad;
   const average = (good - bad) / total;
   const positive = good / total * 100;
 
   return(
     <div>
-      <h1>Stats</h1>
       <p>Good: {good}</p>
       <p>Neutral: {neutral}</p>
       <p>Bad: {bad}</p>
       <p>All: {total}</p>
-      <p>Average: {isFinite(average) ? average: 0}</p>
-      <p>Positive: {isFinite(positive) ? positive: 0} %</p>
+      <p>Average: {average}</p>
+      <p>Positive: {positive} %</p>
     </div>
   )
 }
@@ -42,7 +49,8 @@ function App() {
     <Button handleClick={increment(good, setGood)} text={'Good'} />
     <Button handleClick={increment(neutral, setNeutral)} text={'Neutral'} />
     <Button handleClick={increment(bad, setBad)} text={'Bad'}/>
-    <Display good={good} neutral={neutral} bad= {bad} />
+    <h1>Stats</h1>
+    <Statistics good={good} neutral={neutral} bad= {bad} />
   </div>
   )
 }
