@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react'
-dddk
+
 const Button = ({handleClick, text}) =>{
   return(
     <>
@@ -10,12 +10,19 @@ const Button = ({handleClick, text}) =>{
 }
 
 const Display = ({good, neutral, bad}) =>{
+  const total = good + neutral + bad;
+  const average = (good - bad) / total;
+  const positive = good / total * 100;
+
   return(
     <div>
       <h1>Stats</h1>
       <p>Good: {good}</p>
       <p>Neutral: {neutral}</p>
       <p>Bad: {bad}</p>
+      <p>All: {total}</p>
+      <p>Average: {isFinite(average) ? average: 0}</p>
+      <p>Positive: {isFinite(positive) ? positive: 0} %</p>
     </div>
   )
 }
