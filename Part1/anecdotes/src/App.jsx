@@ -1,4 +1,24 @@
+/* eslint-disable react/prop-types */
 import { useState } from 'react'
+
+const ShowAnecdote = ({anecdote, vote}) => {
+  return(
+    <div>
+      <p>{anecdote}</p>
+      <p>has {vote} votes</p>
+    </div>
+  )
+}
+
+const HighestVoteAnecdote = ({anecdotes, votes}) => {
+    const maxVote = Math.max(...votes)
+    const index = votes.indexOf(maxVote)
+
+    return (
+      <ShowAnecdote anecdote={anecdotes[index]} vote={votes[index]} />
+    )
+  
+}
 
 const App = () => {
   const anecdotes = [
@@ -29,13 +49,15 @@ const App = () => {
       setVotes(newVotes)
     }
   }
-  
+
   return (
     <div>
-      <p>{anecdotes[selected]} </p>
-      <p>has {votes[selected]} votes</p>
+      <h1>Anecdote of the day</h1>
+      <ShowAnecdote anecdote={anecdotes[selected]} vote={votes[selected]} />
       <button onClick={incrementVote()}>Vote</button>
       <button onClick={getRandomAnecdote()}>Next anecdote</button>
+      <h1>Anecdote with most Votes</h1>
+      <HighestVoteAnecdote anecdotes={anecdotes} votes={votes} />
     </div>
   )
 }
