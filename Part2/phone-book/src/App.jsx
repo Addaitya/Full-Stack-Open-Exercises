@@ -8,15 +8,23 @@ const App = () => {
     setNewName(event.target.value)
   }
 
+  const personExist = (persons, newName) => {
+    return !!persons.find((person) => person.name.toLowerCase() === newName.toLowerCase())
+  }
+
   const addName = (event) => {
-    event.preventDefault()
-    const newPerson = {
-      name: newName,
-      id: persons.length
+    event.preventDefault();
+    if(personExist(persons, newName)){
+      alert(`${newName} is already added to phonebook`);
+      return;
     }
+
+    const newPerson = {
+      name: newName
+    }
+    
     setPersons(persons.concat(newPerson))
     setNewName('')
-    console.log(persons.concat(newPerson))
   }
 
   return (
@@ -33,7 +41,7 @@ const App = () => {
       <h2>Numbers</h2>
       <div>
         {persons.map((person) => (
-          <p key={person.id}>{person.name}</p>
+          <p key={person.name}>{person.name}</p>
         ))}
       </div>
     </div>
