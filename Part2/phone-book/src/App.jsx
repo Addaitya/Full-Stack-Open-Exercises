@@ -1,61 +1,38 @@
 import { useState } from 'react'
+import AddEntry from './components/AddEntry'
+import ShowPersons from './components/ShowPersons'
+import Filter from './components/Filter'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
-  const [newName, setNewName] = useState('')
-  const [newPhoneNo, setNewPhoneNo] = useState('')
+  
+  const [filteredPersons, setFilteredPersons] = useState(persons)
 
-  const handleName = (event) =>{
-    setNewName(event.target.value)
+  const personExist = (newPerson) => {
+    return !!persons.find((person) => person.name.toLowerCase() === newPerson.name.toLowerCase())
   }
 
-  const personExist = (persons, newName) => {
-    return !!persons.find((person) => person.name.toLowerCase() === newName.toLowerCase())
-  }
-
-  const handlePhoneNo = (event) =>{
-    setNewPhoneNo(event.target.value)
-  }
-
-  const addName = (event) => {
-    event.preventDefault();
-    if(personExist(persons, newName)){
-      alert(`${newName} is already added to phonebook`);
-      return;
+  // return true if entry added successfully
+  const addNewEntry = (newPerson) =>{
+    if(personExist(newPerson)){
+      alert(`${newPerson.name} already exist in phonebook`);
+      return false;
     }
 
-    const newPerson = {
-      name: newName,
-      phoneNo: newPhoneNo
-    }
-    
-    setPersons(persons.concat(newPerson))
-    setNewName('')
-    setNewPhoneNo('')
+    const newEntry = {id: persons.length, ...newPerson}
+    setPersons(persons.concat(newEntry))
+    setFilteredPersons(persons.concat(newEntry))
+    return true;
   }
 
   return (
     <div>
+      <Filter persons={persons} setFilteredPersons={setFilteredPersons} />
       <h2>Phonebook</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input type="text" value={newName} onChange={handleName}/>
-        </div>
-        <br />
-        <div>
-          phone no: <input type="text" value={newPhoneNo} onChange={handlePhoneNo}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <AddEntry addNewEntry={addNewEntry} />
       <h2>Numbers</h2>
-      <div>
-        {persons.map((person) => (
-          <p key={person.name}>{person.name} {person.phoneNo}</p>
-        ))}
-      </div>
-    </div>
+      <ShowPersons persons={filteredPersons} />
+    </div> 
   )
 }
 
