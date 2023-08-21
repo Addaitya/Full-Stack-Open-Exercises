@@ -1,26 +1,19 @@
 /* eslint-disable react/prop-types */
-import { useState } from 'react'
+import { useState } from 'react';
+import ShowPersons from './ShowPersons';
 
-const Filter = ({persons, setFilteredPersons}) =>{
+const Filter = ({persons}) =>{
   
   const [searchName, setSearchName] = useState('');
-
+  const [filteredPersons, setFilteredPersons] = useState([]);
+  
   const handleSearchName = (event) =>{
     setSearchName(event.target.value);
-    filter(event.target.value.toLowerCase());
+    filterNames(event.target.value.toLowerCase().trim());
   }
 
-  const filter = (name) =>{
-    const finalPersons = []
-    persons.forEach((person) => {
-
-        if(person.name.toLowerCase().includes(name)){
-          (finalPersons.push(person));
-        }
-    })
-    console.log("finalPersons",finalPersons)
-    console.log(finalPersons)
-    setFilteredPersons(finalPersons)
+  const filterNames = (name) =>{
+    setFilteredPersons(persons.filter((person) => person.name.toLowerCase().includes(name)))
   }
 
   return(
@@ -28,6 +21,7 @@ const Filter = ({persons, setFilteredPersons}) =>{
       <label>
         Filter: <input type='text' value={searchName} onChange={handleSearchName} />
       </label>
+      <ShowPersons persons={filteredPersons} />
     </div>
   )
 }

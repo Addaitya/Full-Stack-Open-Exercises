@@ -16,6 +16,11 @@ const AddEntry = ({addNewEntry}) => {
   const handleAddPerson = (event) =>{
     event.preventDefault();
 
+    if(newName.trim() === '' || newNumber.trim() === '') { 
+      alert("Fill the fields");
+      return;
+    }
+    
     const newPerson ={
       name: newName,
       number: newNumber,

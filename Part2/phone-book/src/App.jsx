@@ -1,12 +1,12 @@
-import { useState } from 'react'
-import AddEntry from './components/AddEntry'
-import ShowPersons from './components/ShowPersons'
-import Filter from './components/Filter'
+import { useState, useEffect } from 'react';
+import AddEntry from './components/AddEntry';
+import ShowPersons from './components/ShowPersons';
+import handleBackend from './service/handleBackend';
+import Filter from './components/Filter'; 
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
   
-  const [filteredPersons, setFilteredPersons] = useState(persons)
 
   const personExist = (newPerson) => {
     return !!persons.find((person) => person.name.toLowerCase() === newPerson.name.toLowerCase())
@@ -19,19 +19,26 @@ const App = () => {
       return false;
     }
 
-    const newEntry = {id: persons.length, ...newPerson}
-    setPersons(persons.concat(newEntry))
-    setFilteredPersons(persons.concat(newEntry))
+    handleBackend
+      .addPerson(newPerson)
+      .then((includePerson) => setPersons(persons.concat(includePerson)))
+
     return true;
   }
+   
+  useEffect(() => {
+    handleBackend
+      .getPersons()
+      .then((includePersons) => setPersons(includePersons))
+  }, [])
 
   return (
     <div>
-      <Filter persons={persons} setFilteredPersons={setFilteredPersons} />
+      <Filter persons={persons} />
       <h2>Phonebook</h2>
       <AddEntry addNewEntry={addNewEntry} />
       <h2>Numbers</h2>
-      <ShowPersons persons={filteredPersons} />
+      <ShowPersons persons={persons} />
     </div> 
   )
 }
