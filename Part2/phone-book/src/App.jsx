@@ -1,12 +1,15 @@
+/* eslint-disable react/prop-types */
 import { useState, useEffect } from 'react';
 import AddEntry from './components/AddEntry';
 import ShowPersons from './components/ShowPersons';
 import handleBackend from './service/handleBackend';
 import Filter from './components/Filter'; 
+import Notification from './components/Notification';
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
-  
+  const [msg, setMsg] = useState(null)
+
   const personExist = (newPersonName) => {
     const oldPerson = persons.find((person) => person.name.toLowerCase() === newPersonName.toLowerCase());
     if(oldPerson != undefined){
@@ -14,7 +17,7 @@ const App = () => {
     }
     return -1;
   }
-
+  
   // true means person updated.
   const updatePerson = (newPerson, id) =>{
     if(window.confirm(`${newPerson.name} already exit, replace old number with new?`)){
@@ -22,6 +25,8 @@ const App = () => {
         .update(newPerson, id)
         .then((includePerson) => setPersons(persons.map((person) => (person.id === includePerson.id)?includePerson: person)))
         .catch(error => console.log(`Error in updating person ${error}`));
+      
+      setMsg(`${newPerson.name} number updated successfully`)
       return true;
     }
     return false;
@@ -38,7 +43,8 @@ const App = () => {
       .addPerson(newPerson)
       .then((includePerson) => setPersons(persons.concat(includePerson)))
       .catch(error => console.log(`Error in adding new Person ${error}`));
-
+    
+    setMsg(`${newPerson.name} added successfully`);
     return true;
   }
 
@@ -55,6 +61,8 @@ const App = () => {
         setPersons(persons.filter((person) => person.id !== id))
       })
       .catch(error => console.log(`Error in backend deletion ${error}\n `))
+
+    setMsg(`${toDeletePerson.name} deleted successfully.  `)
   }
    
   useEffect(() => {
@@ -66,6 +74,7 @@ const App = () => {
   return (
     <div>
       <Filter persons={persons} />
+      <Notification msg={msg} makeMsgNull={() => setMsg(null)} />
       <h2>Phonebook</h2>
       <AddEntry addNewEntry={addNewEntry} />
       <h2>Numbers</h2>
