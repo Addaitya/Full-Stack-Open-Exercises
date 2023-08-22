@@ -13,6 +13,10 @@ const Filter = ({persons}) =>{
   }
 
   const filterNames = (name) =>{
+    if(name === ""){
+      setFilteredPersons([])
+      return;
+    }
     setFilteredPersons(persons.filter((person) => person.name.toLowerCase().includes(name)))
   }
 
