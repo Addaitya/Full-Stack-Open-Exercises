@@ -12,4 +12,9 @@ const addPerson = async (person) => {
   return  request.data; 
 }
 
-export default {addPerson: addPerson, getPersons: getPersons}
+const deletePerson = (id) => {
+    const request = axios.delete(`${url}${id}`)
+    return request;
+}
+
+export default {addPerson: addPerson, getPersons: getPersons, del: deletePerson}

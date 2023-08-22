@@ -3,6 +3,7 @@ import AddEntry from './components/AddEntry';
 import ShowPersons from './components/ShowPersons';
 import handleBackend from './service/handleBackend';
 import Filter from './components/Filter'; 
+// import axios from 'axios';
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -25,6 +26,21 @@ const App = () => {
 
     return true;
   }
+
+  const deletePerson = (id) =>{
+    const toDeletePerson = persons.find((person) => person.id === id)
+
+    if(!window.confirm(`Delete ${toDeletePerson.name}?`)){
+      return;
+    }
+    
+    handleBackend
+      .del(id)
+      .then(() => {
+        setPersons(persons.filter((person) => person.id !== id))
+      })
+      .catch(error => console.log(`Error in backend deletion ${error}\n `))
+  }
    
   useEffect(() => {
     handleBackend
@@ -38,7 +54,7 @@ const App = () => {
       <h2>Phonebook</h2>
       <AddEntry addNewEntry={addNewEntry} />
       <h2>Numbers</h2>
-      <ShowPersons persons={persons} />
+      <ShowPersons persons={persons} deletePerson={deletePerson}/>
     </div> 
   )
 }
