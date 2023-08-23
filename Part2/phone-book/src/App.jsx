@@ -5,6 +5,7 @@ import ShowPersons from './components/ShowPersons';
 import handleBackend from './service/handleBackend';
 import Filter from './components/Filter'; 
 import Notification from './components/Notification';
+// import { AxiosError } from 'axios';
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -59,10 +60,14 @@ const App = () => {
       .del(id)
       .then(() => {
         setPersons(persons.filter((person) => person.id !== id))
+        setMsg(`${toDeletePerson.name} deleted successfully.  `)
       })
-      .catch(error => console.log(`Error in backend deletion ${error}\n `))
-
-    setMsg(`${toDeletePerson.name} deleted successfully.  `)
+      .catch((error) =>{
+        if(error.response.status === 404){
+          setPersons(persons.filter((person) => person.id !== id))
+          setMsg(`${toDeletePerson.name} already removed from server.`)
+        }
+      })
   }
    
   useEffect(() => {
