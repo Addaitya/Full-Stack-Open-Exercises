@@ -1,4 +1,6 @@
 /* eslint-disable react/prop-types */
+import CountryName from "./CountryName";
+
 const ShowCountryNames = ({countryNames}) => {
   if(!countryNames){
     return null;
@@ -12,7 +14,7 @@ const ShowCountryNames = ({countryNames}) => {
           :
             (countryNames.length > 1)
               ?
-              countryNames.map(countryName => (<p key={countryName}>{countryName}</p>))
+              countryNames.map(countryName => (<CountryName key={countryName} name={countryName} />))
               :
               <p>No match found...</p>  
       }

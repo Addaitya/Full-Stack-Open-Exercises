@@ -23,6 +23,7 @@ function App() {
     filterCountryNames('');
   }
 
+  // changes reqired
   const filterCountryNames = (name) => {
     if(name === ''){
       setFilteredCountries(null);
@@ -32,7 +33,7 @@ function App() {
     const countries = countryNames.filter(countryName =>  countryName.toLowerCase().includes(name))
     setFilteredCountries(countries);
   }
-  
+
   return(
     <>
       <label>
